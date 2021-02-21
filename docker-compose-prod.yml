@@ -1,0 +1,63 @@
+version: "3"
+
+services:
+
+    djangocms_db:
+        container_name: "${CONTAINER_NAME}_db"
+        image: postgres:12.3
+        volumes:
+            - ./volumes/db-data-psql:/var/lib/postgresql/data
+        restart: always
+        environment:
+            - DB_HOST=djangocms_db
+            - DB_PORT=${DB_PORT}
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+    djangocms:
+        container_name: "${CONTAINER_NAME}_djangocms"
+        build:
+            context: ./bin/
+            dockerfile: dockerfile
+        volumes:
+            - ./volumes/django:/srv/project
+            - ./volumes/static:/srv/static
+        depends_on:
+            - djangocms_db
+            #- prod_redis
+        restart: always
+        environment:
+            - PGDATA="/var/lib/postgresql/data"
+            - DB_HOST=djangocms_db
+            - DB_ENGINE=${DB_ENGINE}
+            - DB_PORT=${DB_PORT}
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+
+    djangocms_nginx:
+        container_name: "${CONTAINER_NAME}_djangocms_nginx"
+        image: nginx:1.15
+        ports:
+            - "0.0.0.0:${PORT_DJANGOCMS}:850"
+        depends_on:
+            - djangocms
+        volumes:
+            - ./volumes/django:/srv/project
+            - ./volumes/static:/srv/static
+            - ./nginx-config/nginx.tmpl:/etc/nginx/conf.d/nginx.tmpl
+            - ./nginx-config/localhost.crt:/etc/ssl/certs/localhost.crt
+            - ./nginx-config/localhost.key:/etc/ssl/private/localhost.key
+        command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.tmpl > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
+        restart: always
+        environment:
+            - NGINX_SERVER_NAME=localhost
+            - NGINX_CRT_NAME=localhost
+            - NGINX_KEY_NAME=localhost
+
+networks:
+    default:
+        external:
+            name: ${NETWORK_NAME}

@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+
+    djangocms_db:
+        container_name: "${CONTAINER_NAME}_db"
+        image: postgres:12.3
+        volumes:
+            - ./volumes/db-data-psql:/var/lib/postgresql/data
+        restart: always
+        environment:
+            - DB_HOST=djangocms_db
+            - DB_PORT=${DB_PORT}
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+    djangocms:
+        container_name: "${CONTAINER_NAME}_djangocms"
+        build:
+            context: ./bin/
+            dockerfile: dockerfile
+        ports:
+            - "0.0.0.0:3002:3000"  # PTVSD DEBUG PORT
+            - "0.0.0.0:${PORT_DJANGOCMS}:8000"
+        volumes:
+            - ./volumes/django:/srv/project
+            - ./volumes/static:/srv/static
+        depends_on:
+            - djangocms_db
+        restart: always
+        environment:
+            - PGDATA="/var/lib/postgresql/data"
+            - DB_HOST=djangocms_db
+            - DB_ENGINE=${DB_ENGINE}
+            - DB_PORT=${DB_PORT}
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+
+networks:
+    default:
+        external:
+            name: ${NETWORK_NAME}

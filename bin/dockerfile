@@ -1,0 +1,74 @@
+# DOCKER FILE FOR DJANGO IN PROD MODE
+# BY Pedro Reina Rojas (apachebcn@gmail.com)
+
+FROM python:3.7
+
+ENV PROJECT_ROOT=/"srv/project"
+ENV PROJECT_PROJECT=/srv/project/project
+ENV SCRIPTS=/srv/scripts
+ENV CONFIG=/srv/config
+
+RUN apt update
+RUN apt install -y mc gettext
+RUN pip install --upgrade pip
+RUN pip3 install --upgrade pip
+
+# Add database check script
+ADD ./config/database-check-psql.py ${CONFIG}/
+
+# Add uWSGI config
+ADD ./config/django-uwsgi.ini /etc/uwsgi/django-uwsgi.ini
+
+# Crear usuario
+RUN adduser -u 1000 --no-create-home --disabled-login --group --system django
+
+RUN pip3 install django-ptvsd-debug
+RUN pip3 install djangocms-installer
+RUN pip3 install django-cms
+RUN pip3 install djangocms_admin_style
+RUN pip3 install django-filer
+RUN pip3 install Pillow
+RUN pip3 install djangocms-text-ckeditor
+RUN pip3 install djangocms-link djangocms-file
+RUN pip3 install djangocms-picture
+RUN pip3 install djangocms-video
+RUN pip3 install djangocms-googlemap
+RUN pip3 install djangocms-snippet
+RUN pip3 install djangocms-style
+RUN pip3 install djangocms-lang-chooser
+#RUN pip3 install djangocms_bootstrap
+RUN pip3 install django_bootstrap4
+RUN pip3 install djangocms_bootstrap4
+# RUN pip3 install django-adminlte3
+# RUN pip3 install django-admin-honeypot
+# RUN pip3 install django-clear-cache
+
+
+# Extra Apt installs
+COPY ./config/install_customs_apt.sh ${SCRIPTS}/
+RUN chmod +x ${SCRIPTS}/install_customs_apt.sh
+RUN ${SCRIPTS}/install_customs_apt.sh
+
+# Extra Pip installs
+COPY ./config/install_customs_pip.sh ${SCRIPTS}/
+RUN chmod +x ${SCRIPTS}/install_customs_pip.sh
+RUN ${SCRIPTS}/install_customs_pip.sh
+
+# Install application requirements
+ADD ./config/requirements.txt ${CONFIG}/
+RUN pip3 install -r ${CONFIG}/requirements.txt
+
+# Scripts de arranque
+RUN echo "*******************"
+RUN echo ${SCRIPTS}
+RUN echo "*******************"
+ADD ./scripts/start.sh ${SCRIPTS}/
+ADD ./scripts/start_db.sh ${SCRIPTS}/
+RUN chmod +x ${SCRIPTS}/*.sh
+
+VOLUME ["/srv/project", "/srv/static"]
+
+WORKDIR /srv/project
+
+# Execute start script
+CMD ["/srv/scripts/start.sh"]
