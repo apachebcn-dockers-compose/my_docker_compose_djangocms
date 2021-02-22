@@ -45,7 +45,7 @@ services:
         depends_on:
             - djangocms
         volumes:
-            - ./volumes/django:/srv/project
+            - ./volumes/djangocms:/srv/project
             - ./volumes/static:/srv/static
             - ./nginx-config/nginx.tmpl:/etc/nginx/conf.d/nginx.tmpl
             - ./nginx-config/localhost.crt:/etc/ssl/certs/localhost.crt
