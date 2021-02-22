@@ -22,7 +22,7 @@ services:
             context: ./bin/
             dockerfile: dockerfile
         volumes:
-            - ./volumes/django:/srv/project
+            - ./volumes/djangocms:/srv/project
             - ./volumes/static:/srv/static
         depends_on:
             - djangocms_db
