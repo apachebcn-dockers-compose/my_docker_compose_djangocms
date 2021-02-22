@@ -16,7 +16,7 @@ services:
             - DB_PASSWORD=${DB_PASSWORD}
             - POSTGRES_PASSWORD=${DB_PASSWORD}
         ports:
-            - "0.0.0.0:${DB_PORT}"
+            - "0.0.0.0:5432:${DB_PORT}"
 
     djangocms:
         container_name: "${CONTAINER_NAME}_djangocms"
