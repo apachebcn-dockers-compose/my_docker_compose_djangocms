@@ -3,7 +3,7 @@ version: "3"
 services:
 
     djangocms_db:
-        container_name: "${CONTAINER_NAME}_db"
+        container_name: "${CONTAINER_NAME}_djangocms_db"
         image: postgres:12.3
         volumes:
             - ./volumes/db-data-psql:/var/lib/postgresql/data
