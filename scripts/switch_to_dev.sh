@@ -7,7 +7,7 @@ cp docker-compose-dev.yml docker-compose.yml
 rm -f ./bin/scripts/start.sh
 cp  ./bin/scripts/start-dev.sh ./bin/scripts/start.sh
 
-rm -f ./MODE-PROD
-touch ./MODE-DEV
+rm -f ./IS-IN-MODE-PROD
+touch ./IS-IN-MODE-DEV
 
 docker-compose up --build -d
