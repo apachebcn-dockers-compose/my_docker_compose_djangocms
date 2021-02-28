@@ -13,8 +13,8 @@ http {
     # http://nginx.org/en/docs/http/configuring_https_servers.html#optimization
 
     server_tokens off;
-    upstream django {
-        server djangocms:8000;
+    upstream djangocms {
+        server djangocmscms:8000;
     }
 
     server {
@@ -38,7 +38,7 @@ http {
         location = /favicon.ico { access_log off; log_not_found off; return 404; }
 
         location / {
-            uwsgi_pass      django;
+            uwsgi_pass      djangocms;
             include         uwsgi_params;
         }
     }
