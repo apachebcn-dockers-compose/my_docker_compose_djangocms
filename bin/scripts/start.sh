@@ -7,7 +7,7 @@ echo "*********************************"
 echo "*********************************"
 echo "*********************************"
 echo "*                               *"
-echo "*     start.sh MODE PROD        *"
+echo "*     start.sh MODE DEV         *"
 echo "*                               *"
 echo "*********************************"
 echo "*********************************"
@@ -27,10 +27,10 @@ if [ ! -f $MANAGE_FILE ]; then
 fi
 chown -R django:django /srv
 
-echo "==> Django setup, executing: collectstatic"
-python3 /srv/project/manage.py collectstatic --noinput -v 3
-
 /srv/scripts/start_db.sh
 
-echo "==> Starting uWSGI ..."
-/usr/local/bin/uwsgi --emperor /etc/uwsgi/django-uwsgi.ini
+cd /srv/project
+
+echo "==> Starting django server ..."
+python3 /srv/project/manage.py runserver 0.0.0.0:8000
+
