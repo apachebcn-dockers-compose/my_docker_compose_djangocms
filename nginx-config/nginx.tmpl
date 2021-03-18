@@ -23,7 +23,7 @@ http {
         server_name ${NGINX_SERVER_NAME};
 
         location /static {
-            alias /srv/static;
+            alias /srv/project/static;
             # http://stackoverflow.com/q/19213510/1346257
             include /etc/nginx/mime.types;
         }
