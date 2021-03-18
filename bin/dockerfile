@@ -53,9 +53,6 @@ RUN ${SCRIPTS}/install_customs_pip.sh
 ADD ./config/requirements.txt ${CONFIG}/
 RUN pip3 install -r ${CONFIG}/requirements.txt
 
-RUN pip3 install django-ptvsd-debug
-RUN pip3 install djangocms-lang-chooser
-
 
 # Scripts de arranque
 RUN echo "*******************"

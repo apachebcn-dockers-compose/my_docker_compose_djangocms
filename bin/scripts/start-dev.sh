@@ -29,8 +29,6 @@ chown -R django:django /srv
 
 /srv/scripts/start_db.sh
 
-cd /srv/project
-
 echo "==> Starting django server ..."
 python3 /srv/project/manage.py runserver 0.0.0.0:8000
 

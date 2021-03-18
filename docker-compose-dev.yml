@@ -40,6 +40,7 @@ services:
             - DB_NAME=${DB_NAME}
             - DB_USER=${DB_USER}
             - DB_PASSWORD=${DB_PASSWORD}
+            - DJANGO_DEBUG=1
 
 networks:
     default:

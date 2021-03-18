@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 cd ..
+rm -r ./.env
+cp .env-dev .env
+
+cd ..
 rm -r ./docker-compose.yml
 cp docker-compose-dev.yml docker-compose.yml
 
