@@ -13,4 +13,4 @@ rm -f ../IS-IN-MODE-DEV
 touch ../IS-IN-MODE-PROD
 
 cd ..
-docker-compose up --build -d
+docker-compose build

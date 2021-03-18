@@ -62,7 +62,7 @@ ADD ./scripts/start.sh ${SCRIPTS}/
 ADD ./scripts/start_db.sh ${SCRIPTS}/
 RUN chmod +x ${SCRIPTS}/*.sh
 
-VOLUME ["/srv/project", "/srv/static"]
+VOLUME ["/srv/project"]
 
 WORKDIR /srv/project
 
