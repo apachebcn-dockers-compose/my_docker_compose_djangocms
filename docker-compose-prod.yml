@@ -23,6 +23,7 @@ services:
             dockerfile: dockerfile
         volumes:
             - ./volumes/djangocms:/srv/project
+            - ./volumes/static:/srv/project/static
         depends_on:
             - djangocms_db
             #- prod_redis
