@@ -5,5 +5,5 @@ pip3 install djangocms-page-meta
 pip3 install django-contrib-comments
 pip3 install django-simple-captcha
 pip3 install djangocms-multisite
-
+pip3 install djangocms-page-sitemap
 pip3 install jsonfield
